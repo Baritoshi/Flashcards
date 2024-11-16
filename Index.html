@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Trainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Vocabulary Trainer</h1>
+        
+        <!-- Vocabulary Input Form -->
+        <form id="vocab-form">
+            <label for="vocab-list">Enter your vocabulary list:</label><br>
+            <textarea id="vocab-list" rows="5" placeholder="e.g., cat,kot,dog,pies,house,dom"></textarea><br>
+            <button type="submit">Start Training</button>
+        </form>
+
+        <!-- Question Section -->
+        <div id="training-section" style="display: none;">
+            <p id="question"></p>
+            <input type="text" id="answer" placeholder="Type the translation">
+            <button id="submit-answer">Submit</button>
+            <p id="feedback"></p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
