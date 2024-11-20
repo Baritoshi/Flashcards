@@ -20,13 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        vocabulary = rawInput.split(',').reduce((acc, word, idx, arr) => {
-            if (idx % 2 === 0) acc.push({ english: word, polish: arr[idx + 1] || "" });
-            return acc;
-        }, []);
+        // Split by newlines and/or commas
+        const lines = rawInput.split(/\n|,/).map((item) => item.trim());
+        if (lines.length % 2 !== 0) {
+            alert("Invalid input. Ensure each English word has a matching Polish translation.");
+            return;
+        }
+
+        // Group into vocabulary pairs
+        vocabulary = [];
+        for (let i = 0; i < lines.length; i += 2) {
+            vocabulary.push({ english: lines[i], polish: lines[i + 1] });
+        }
 
         if (vocabulary.length === 0) {
-            alert("Invalid input. Please enter pairs in the format: word1,word2,word3,word4...");
+            alert("Invalid input. Please enter pairs in the format: word1,word2...");
             return;
         }
 
