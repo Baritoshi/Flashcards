@@ -1,52 +1,88 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const vocabForm = document.getElementById("vocab-form");
-    const vocabListInput = document.getElementById("vocab-list");
+    // DOM elements
+    const mainMenu = document.getElementById("main-menu");
+    const optionsMenu = document.getElementById("options-menu");
     const trainingSection = document.getElementById("training-section");
     const question = document.getElementById("question");
     const answerInput = document.getElementById("answer");
     const submitAnswerBtn = document.getElementById("submit-answer");
     const feedback = document.getElementById("feedback");
 
-    let vocabulary = []; // Array to hold vocabulary pairs
-    let currentIndex = 0; // Track current word index
+    const addWordsForm = document.getElementById("add-words-form");
+    const wordPairsInput = document.getElementById("word-pairs");
+    const backToMainBtn = document.getElementById("back-to-main");
+    const startLessonBtn = document.getElementById("start-lesson");
+    const openOptionsBtn = document.getElementById("open-options");
 
-    // Parse vocabulary and start training
-    vocabForm.addEventListener("submit", (e) => {
+    // Stored vocabulary
+    let storedWords = JSON.parse(localStorage.getItem("storedWords")) || [];
+    let currentLesson = [];
+    let currentIndex = 0;
+
+    // Navigation
+    const showMainMenu = () => {
+        mainMenu.style.display = "block";
+        optionsMenu.style.display = "none";
+        trainingSection.style.display = "none";
+    };
+
+    const showOptionsMenu = () => {
+        mainMenu.style.display = "none";
+        optionsMenu.style.display = "block";
+        trainingSection.style.display = "none";
+    };
+
+    const showTrainingSection = () => {
+        mainMenu.style.display = "none";
+        optionsMenu.style.display = "none";
+        trainingSection.style.display = "block";
+    };
+
+    // Options Menu: Save words
+    addWordsForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const rawInput = vocabListInput.value.trim();
+        const rawInput = wordPairsInput.value.trim();
         if (!rawInput) {
-            alert("Please enter a vocabulary list.");
+            alert("Please enter some words.");
             return;
         }
 
-        // Split by newlines and/or commas
         const lines = rawInput.split(/\n|,/).map((item) => item.trim());
         if (lines.length % 2 !== 0) {
             alert("Invalid input. Ensure each English word has a matching Polish translation.");
             return;
         }
 
-        // Group into vocabulary pairs
-        vocabulary = [];
+        // Save words
         for (let i = 0; i < lines.length; i += 2) {
-            vocabulary.push({ english: lines[i], polish: lines[i + 1] });
+            storedWords.push({ english: lines[i], polish: lines[i + 1] });
         }
 
-        if (vocabulary.length === 0) {
-            alert("Invalid input. Please enter pairs in the format: word1,word2...");
+        localStorage.setItem("storedWords", JSON.stringify(storedWords));
+        wordPairsInput.value = "";
+        alert("Words added successfully!");
+    });
+
+    // Start a new lesson
+    startLessonBtn.addEventListener("click", () => {
+        if (storedWords.length < 10) {
+            alert("You need at least 10 words to start a lesson.");
             return;
         }
 
-        vocabForm.style.display = "none";
-        trainingSection.style.display = "block";
-
+        // Randomly select 10 words
+        currentLesson = [...storedWords]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 10);
+        currentIndex = 0;
+        showTrainingSection();
         askQuestion();
     });
 
-    // Display the current question
+    // Ask a question
     const askQuestion = () => {
-        const currentWord = vocabulary[currentIndex];
+        const currentWord = currentLesson[currentIndex];
         question.textContent = `Translate this word: ${currentWord.english}`;
         feedback.textContent = ""; // Clear feedback
         answerInput.value = ""; // Clear input
@@ -56,24 +92,32 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check the user's answer
     submitAnswerBtn.addEventListener("click", () => {
         const userAnswer = answerInput.value.trim().toLowerCase();
-        const currentWord = vocabulary[currentIndex];
+        const currentWord = currentLesson[currentIndex];
 
         if (userAnswer === currentWord.polish.toLowerCase()) {
             feedback.textContent = "Correct!";
             feedback.style.color = "green";
             // Move to the next word
             currentIndex++;
-            if (currentIndex >= vocabulary.length) {
-                currentIndex = 0; // Loop back if needed
-                alert("You've completed one round of practice!");
+            if (currentIndex >= currentLesson.length) {
+                alert("Lesson complete!");
+                showMainMenu();
+                return;
             }
         } else {
             feedback.textContent = `Incorrect! The correct translation is "${currentWord.polish}".`;
             feedback.style.color = "red";
             // Move the current word to the end
-            vocabulary.push(vocabulary.splice(currentIndex, 1)[0]);
+            currentLesson.push(currentLesson.splice(currentIndex, 1)[0]);
         }
 
         askQuestion();
     });
+
+    // Navigation buttons
+    openOptionsBtn.addEventListener("click", showOptionsMenu);
+    backToMainBtn.addEventListener("click", showMainMenu);
+
+    // Show the main menu on load
+    showMainMenu();
 });
