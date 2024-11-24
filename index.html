@@ -9,17 +9,25 @@
 <body>
     <div class="container">
         <h1>Vocabulary Trainer</h1>
-        
-        <!-- Vocabulary Input Form -->
-        <form id="vocab-form">
-            <label for="vocab-list">Enter your vocabulary list:</label><br>
-            <textarea id="vocab-list" rows="5" placeholder="e.g., cat,kot
-                dog,pies
-                house,dom"></textarea><br>
-            <button type="submit">Start Training</button>
-        </form>
 
-        <!-- Question Section -->
+        <!-- Main Menu -->
+        <div id="main-menu">
+            <button id="start-lesson">Start Lesson</button>
+            <button id="open-options">Options Menu</button>
+        </div>
+
+        <!-- Options Menu -->
+        <div id="options-menu" style="display: none;">
+            <h2>Options Menu</h2>
+            <form id="add-words-form">
+                <label for="word-pairs">Add words (comma-separated pairs):</label><br>
+                <textarea id="word-pairs" rows="5" placeholder="e.g., cat,kot,dog,pies"></textarea><br>
+                <button type="submit">Save Words</button>
+            </form>
+            <button id="back-to-main">Back to Main Menu</button>
+        </div>
+
+        <!-- Training Section -->
         <div id="training-section" style="display: none;">
             <p id="question"></p>
             <input type="text" id="answer" placeholder="Type the translation">
