@@ -40,30 +40,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Options Menu: Save words
     addWordsForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const rawInput = wordPairsInput.value.trim();
-        if (!rawInput) {
-            alert("Please enter some words.");
-            return;
+    const rawInput = wordPairsInput.value.trim();
+    if (!rawInput) {
+        alert("Please enter some words.");
+        return;
+    }
+
+    // Split input by newlines or commas
+    const lines = rawInput.split(/\n|,/).map((item) => item.trim());
+    
+    // Validate and create word pairs
+    const newWords = [];
+    for (let i = 0; i < lines.length; i += 2) {
+        if (lines[i] && lines[i + 1]) { // Ensure both English and Polish words exist
+            newWords.push({ english: lines[i], polish: lines[i + 1] });
         }
+    }
 
-        const lines = rawInput.split(/\n|,/).map((item) => item.trim());
-        if (lines.length % 2 !== 0) {
-            alert("Invalid input. Ensure each English word has a matching Polish translation.");
-            return;
-        }
+    if (newWords.length === 0) {
+        alert("Invalid input. Please enter valid word pairs (e.g., 'cat,kot').");
+        return;
+    }
 
-        // Save words
-        for (let i = 0; i < lines.length; i += 2) {
-            storedWords.push({ english: lines[i], polish: lines[i + 1] });
-        }
-
-        localStorage.setItem("storedWords", JSON.stringify(storedWords));
-        wordPairsInput.value = "";
-        alert("Words added successfully!");
-    });
-
+    // Save new words to storage
+    storedWords = [...storedWords, ...newWords];
+    localStorage.setItem("storedWords", JSON.stringify(storedWords));
+    wordPairsInput.value = ""; // Clear input
+    alert(`${newWords.length} words added successfully!`);
+});
     // Start a new lesson
     startLessonBtn.addEventListener("click", () => {
         if (storedWords.length < 10) {
