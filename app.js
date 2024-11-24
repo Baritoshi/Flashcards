@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // DOM elements
+    // DOM Elements
     const mainMenu = document.getElementById("main-menu");
     const optionsMenu = document.getElementById("options-menu");
     const trainingSection = document.getElementById("training-section");
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentLesson = [];
     let currentIndex = 0;
 
-    // Navigation
+    // Navigation Functions
     const showMainMenu = () => {
         mainMenu.style.display = "block";
         optionsMenu.style.display = "none";
@@ -38,39 +38,40 @@ document.addEventListener("DOMContentLoaded", () => {
         trainingSection.style.display = "block";
     };
 
-    // Options Menu: Save words
+    // Options Menu: Add Words
     addWordsForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const rawInput = wordPairsInput.value.trim();
-    if (!rawInput) {
-        alert("Please enter some words.");
-        return;
-    }
-
-    // Split input by newlines or commas
-    const lines = rawInput.split(/\n|,/).map((item) => item.trim());
-    
-    // Validate and create word pairs
-    const newWords = [];
-    for (let i = 0; i < lines.length; i += 2) {
-        if (lines[i] && lines[i + 1]) { // Ensure both English and Polish words exist
-            newWords.push({ english: lines[i], polish: lines[i + 1] });
+        const rawInput = wordPairsInput.value.trim();
+        if (!rawInput) {
+            alert("Please enter some words.");
+            return;
         }
-    }
 
-    if (newWords.length === 0) {
-        alert("Invalid input. Please enter valid word pairs (e.g., 'cat,kot').");
-        return;
-    }
+        // Split input by newlines or commas
+        const lines = rawInput.split(/\n|,/).map((item) => item.trim());
 
-    // Save new words to storage
-    storedWords = [...storedWords, ...newWords];
-    localStorage.setItem("storedWords", JSON.stringify(storedWords));
-    wordPairsInput.value = ""; // Clear input
-    alert(`${newWords.length} words added successfully!`);
-});
-    // Start a new lesson
+        // Validate and create word pairs
+        const newWords = [];
+        for (let i = 0; i < lines.length; i += 2) {
+            if (lines[i] && lines[i + 1]) {
+                newWords.push({ english: lines[i], polish: lines[i + 1] });
+            }
+        }
+
+        if (newWords.length === 0) {
+            alert("Invalid input. Please enter valid word pairs (e.g., 'cat,kot').");
+            return;
+        }
+
+        // Save new words to storage
+        storedWords = [...storedWords, ...newWords];
+        localStorage.setItem("storedWords", JSON.stringify(storedWords));
+        wordPairsInput.value = ""; // Clear input
+        alert(`${newWords.length} words added successfully!`);
+    });
+
+    // Start a New Lesson
     startLessonBtn.addEventListener("click", () => {
         if (storedWords.length < 10) {
             alert("You need at least 10 words to start a lesson.");
@@ -86,43 +87,51 @@ document.addEventListener("DOMContentLoaded", () => {
         askQuestion();
     });
 
-    // Ask a question
+    // Ask a Question
     const askQuestion = () => {
         const currentWord = currentLesson[currentIndex];
         question.textContent = `Translate this word: ${currentWord.english}`;
-        feedback.textContent = ""; // Clear feedback
-        answerInput.value = ""; // Clear input
+        feedback.style.visibility = "hidden"; // Hide feedback for new question
+        feedback.textContent = ""; // Clear previous feedback
+        answerInput.value = ""; // Clear input field
         answerInput.focus();
     };
 
-    // Check the user's answer
+    // Check the User's Answer
     submitAnswerBtn.addEventListener("click", () => {
-    const userAnswer = answerInput.value.trim().toLowerCase();
-    const currentWord = currentLesson[currentIndex];
+        const userAnswer = answerInput.value.trim().toLowerCase();
+        const currentWord = currentLesson[currentIndex];
 
-    if (userAnswer === currentWord.polish.toLowerCase()) {
-        feedback.textContent = `Correct! The translation of "${currentWord.english}" is "${currentWord.polish}".`;
-        feedback.style.color = "green";
-        // Move to the next word
-        currentIndex++;
-        if (currentIndex >= currentLesson.length) {
-            alert("Lesson complete!");
-            showMainMenu();
-            return;
+        // Make feedback visible
+        feedback.style.visibility = "visible";
+
+        if (userAnswer === currentWord.polish.toLowerCase()) {
+            feedback.textContent = `Correct! The translation of "${currentWord.english}" is "${currentWord.polish}".`;
+            feedback.style.color = "green";
+            // Move to the next word
+            currentIndex++;
+            if (currentIndex >= currentLesson.length) {
+                alert("Lesson complete!");
+                showMainMenu();
+                return;
+            }
+        } else {
+            feedback.textContent = `Incorrect! The correct translation of "${currentWord.english}" is "${currentWord.polish}".`;
+            feedback.style.color = "red";
+            // Move the current word to the end of the list
+            currentLesson.push(currentLesson.splice(currentIndex, 1)[0]);
         }
-    } else {
-        feedback.textContent = `Incorrect! The correct translation of "${currentWord.english}" is "${currentWord.polish}".`;
-        feedback.style.color = "red";
-        // Move the current word to the end of the list
-        currentLesson.push(currentLesson.splice(currentIndex, 1)[0]);
-    }
 
-    askQuestion();
-});
-    // Navigation buttons
+        // Delay before showing the next question
+        setTimeout(() => {
+            askQuestion();
+        }, 1000);
+    });
+
+    // Navigation Buttons
     openOptionsBtn.addEventListener("click", showOptionsMenu);
     backToMainBtn.addEventListener("click", showMainMenu);
 
-    // Show the main menu on load
+    // Show Main Menu on Load
     showMainMenu();
 });
