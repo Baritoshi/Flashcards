@@ -97,29 +97,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Check the user's answer
     submitAnswerBtn.addEventListener("click", () => {
-        const userAnswer = answerInput.value.trim().toLowerCase();
-        const currentWord = currentLesson[currentIndex];
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    const currentWord = currentLesson[currentIndex];
 
-        if (userAnswer === currentWord.polish.toLowerCase()) {
-            feedback.textContent = "Correct!";
-            feedback.style.color = "green";
-            // Move to the next word
-            currentIndex++;
-            if (currentIndex >= currentLesson.length) {
-                alert("Lesson complete!");
-                showMainMenu();
-                return;
-            }
-        } else {
-            feedback.textContent = `Incorrect! The correct translation is "${currentWord.polish}".`;
-            feedback.style.color = "red";
-            // Move the current word to the end
-            currentLesson.push(currentLesson.splice(currentIndex, 1)[0]);
+    if (userAnswer === currentWord.polish.toLowerCase()) {
+        feedback.textContent = `Correct! The translation of "${currentWord.english}" is "${currentWord.polish}".`;
+        feedback.style.color = "green";
+        // Move to the next word
+        currentIndex++;
+        if (currentIndex >= currentLesson.length) {
+            alert("Lesson complete!");
+            showMainMenu();
+            return;
         }
+    } else {
+        feedback.textContent = `Incorrect! The correct translation of "${currentWord.english}" is "${currentWord.polish}".`;
+        feedback.style.color = "red";
+        // Move the current word to the end of the list
+        currentLesson.push(currentLesson.splice(currentIndex, 1)[0]);
+    }
 
-        askQuestion();
-    });
-
+    askQuestion();
+});
     // Navigation buttons
     openOptionsBtn.addEventListener("click", showOptionsMenu);
     backToMainBtn.addEventListener("click", showMainMenu);
