@@ -23,27 +23,15 @@
             <!-- Add Words Form -->
             <form id="add-words-form">
                 <label for="word-pairs">Add words (comma-separated pairs):</label><br>
-                <textarea id="word-pairs" rows="5" placeholder="e.g., cat,kot,dog,pies"></textarea><br>
+                <textarea id="word-pairs" rows="5" placeholder="e.g., cat,kot\ndog,pies"></textarea><br>
                 <button type="submit">Save Words</button>
             </form>
 
-            <!-- Word Editor -->
-            <div id="word-editor" style="display: none;">
-                <h3>Word Editor</h3>
-                <table id="word-table">
-                    <thead>
-                        <tr>
-                            <th>English</th>
-                            <th>Polish</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Word rows will be dynamically added here -->
-                    </tbody>
-                </table>
+            <!-- Memo Boxes Section -->
+            <div id="memo-boxes">
+                <!-- Memo boxes will be dynamically rendered here -->
             </div>
-            
+
             <button id="back-to-main">Back to Main Menu</button>
         </div>
 
@@ -61,14 +49,15 @@
             </div>
 
             <!-- Incorrect Words Section -->
-			<div id="incorrect-words" style="display: none; margin-top: 20px;">
-				<h3>Words You Got Wrong</h3>
-				<ul id="incorrect-words-list"></ul>
-				<button id="back-to-main-after-lesson" style="display: none;">Back to Main Menu</button>
-			</div>
-
+            <div id="incorrect-words" style="display: none; margin-top: 20px;">
+                <h3>Words You Got Wrong</h3>
+                <ul id="incorrect-words-list"></ul>
+                <button id="back-to-main-after-lesson" style="display: none;">Back to Main Menu</button>
+            </div>
         </div>
     </div>
-    <script src="app.js"></script>
+
+    <!-- JavaScript Files -->
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

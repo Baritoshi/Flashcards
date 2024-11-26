@@ -56,79 +56,49 @@ button:hover {
     margin: 5px 0;
 }
 
-#word-editor {
+#memo-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
-#word-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
-}
-
-#word-table th, #word-table td {
+.memo-box {
     border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-}
-
-#word-table th {
-    background-color: #f4f4f4;
-}
-
-.word-actions button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
     border-radius: 4px;
-    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+    width: 48%;
+    background-color: #f9f9f9;
 }
 
-.word-actions button:hover {
-    background-color: #0056b3;
-}
-
-.word-actions .delete-button {
-    background-color: #dc3545;
-}
-
-.word-actions .delete-button:hover {
-    background-color: #a71d2a;
-}
-
-#incorrect-words {
-    border-top: 2px solid #ccc;
-    padding-top: 10px;
-}
-
-#incorrect-words h3 {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    color: #d9534f;
-}
-
-#incorrect-words-list {
-    list-style: none;
-    padding: 0;
+.memo-box h4 {
+    margin-top: 0;
+    color: #007bff;
     font-size: 1.1em;
 }
 
-#incorrect-words-list li {
+.memo-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.memo-box ul li {
+    font-size: 0.9em;
     margin-bottom: 5px;
 }
 
-#back-to-main-after-lesson {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
+.memo-box .delete-button {
     color: white;
+    background-color: #dc3545;
     border: none;
+    padding: 5px;
     border-radius: 4px;
+    font-size: 0.8em;
     cursor: pointer;
 }
 
-#back-to-main-after-lesson:hover {
-    background-color: #0056b3;
+.memo-box .delete-button:hover {
+    background-color: #a71d2a;
 }
